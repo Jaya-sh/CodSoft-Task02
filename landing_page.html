@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaBuild — Landing Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ink:    #0d0d0d;
+      --cream:  #f5f0e8;
+      --accent: #e8421a;
+      --muted:  #9e9a94;
+      --white:  #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 3rem;
+      z-index: 100;
+      background: rgba(245,240,232,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(13,13,13,0.08);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    .nav-cta {
+      background: var(--ink);
+      color: var(--cream) !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 2px;
+      font-size: 0.8rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.1em !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--accent) !important; color: var(--white) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 3rem 6rem 5rem;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.6rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 36px; height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 9vw, 9.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      margin-bottom: 2rem;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent);
+      -webkit-text-stroke: 2px var(--accent);
+      color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: #555;
+      line-height: 1.75;
+      max-width: 400px;
+      margin-bottom: 3rem;
+    }
+
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 1rem 2.4rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 2px solid var(--ink);
+      transition: background 0.25s, color 0.25s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--ink);
+      padding: 1rem 2.4rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 2px solid var(--ink);
+      transition: background 0.25s, color 0.25s;
+      display: inline-block;
+    }
+    .btn-outline:hover { background: var(--ink); color: var(--cream); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    .hero-right-inner {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .hero-graphic {
+      width: 72%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: spin-slow 24s linear infinite;
+      position: relative;
+    }
+    .hero-graphic::before {
+      content: '';
+      position: absolute; inset: -24px;
+      border: 1px dashed rgba(232,66,26,0.3);
+      border-radius: 50%;
+      animation: spin-slow 18s linear infinite reverse;
+    }
+    .hero-graphic-inner {
+      width: 60%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) 0deg 90deg, rgba(232,66,26,0.2) 90deg 360deg);
+      animation: spin-slow 6s linear infinite reverse;
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: 2.5rem; left: 2.5rem;
+      background: rgba(245,240,232,0.06);
+      border: 1px solid rgba(245,240,232,0.12);
+      backdrop-filter: blur(8px);
+      padding: 1.2rem 1.6rem;
+      color: var(--cream);
+    }
+    .hero-badge-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.6rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+    .hero-badge-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.6);
+      margin-top: 0.3rem;
+    }
+
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+
+    /* ── MARQUEE ── */
+    .marquee-strip {
+      background: var(--ink);
+      overflow: hidden;
+      padding: 0.85rem 0;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-track span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+      padding: 0 2.5rem;
+    }
+    .marquee-track span.accent { color: var(--accent); }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 7rem 5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 320px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: rgba(13,13,13,0.1);
+      border: 1.5px solid rgba(13,13,13,0.1);
+    }
+
+    .feature-card {
+      background: var(--cream);
+      padding: 3rem 2.5rem;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .feature-card:hover { background: var(--ink); }
+    .feature-card:hover .feature-icon { color: var(--accent); }
+    .feature-card:hover .feature-title,
+    .feature-card:hover .feature-desc { color: var(--cream); }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+      transition: color 0.3s;
+    }
+
+    .feature-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.8rem;
+      transition: color 0.3s;
+    }
+
+    .feature-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+      transition: color 0.3s;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: var(--ink);
+      padding: 5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .stat-item {
+      padding: 2rem 2.5rem;
+      border-right: 1px solid rgba(245,240,232,0.08);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4.5rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.45);
+      margin-top: 0.5rem;
+      font-weight: 400;
+    }
+
+    /* ── SHOWCASE ── */
+    .showcase {
+      padding: 7rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .showcase-visual {
+      position: relative;
+    }
+
+    .showcase-box {
+      aspect-ratio: 4/3;
+      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .showcase-box-inner {
+      position: absolute; inset: 20px;
+      border: 1px solid rgba(232,66,26,0.25);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .showcase-grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(232,66,26,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,66,26,0.07) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .showcase-center-dot {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      position: relative; z-index: 1;
+    }
+
+    .showcase-tag {
+      position: absolute;
+      top: -1rem; right: -1rem;
+      background: var(--accent);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+    }
+
+    .showcase-content {}
+    .showcase-content .section-title { margin-bottom: 1.5rem; }
+    .showcase-content p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    .checklist { list-style: none; margin-bottom: 2.5rem; }
+    .checklist li {
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.9rem;
+      color: #444;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(13,13,13,0.07);
+    }
+    .checklist li::before {
+      content: '→';
+      font-family: 'Space Mono', monospace;
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      background: #0d0d0d;
+      padding: 7rem 5rem;
+    }
+    .testimonials .section-title { color: var(--cream); margin-bottom: 4rem; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: rgba(245,240,232,0.04);
+      border: 1px solid rgba(245,240,232,0.08);
+      padding: 2.5rem;
+      transition: border-color 0.3s;
+    }
+    .testimonial-card:hover { border-color: var(--accent); }
+
+    .testimonial-stars {
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+    }
+
+    .testimonial-text {
+      font-size: 0.92rem;
+      color: rgba(245,240,232,0.7);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .testimonial-author {
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      background: var(--accent);
+      color: var(--white);
+    }
+    .author-name {
+      font-weight: 500;
+      font-size: 0.88rem;
+      color: var(--cream);
+    }
+    .author-role {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 8rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: 'START';
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28vw;
+      color: rgba(13,13,13,0.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: 0.1em;
+    }
+
+    .cta-section .section-title { margin-bottom: 1.5rem; position: relative; }
+    .cta-section p {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      font-weight: 300;
+      position: relative;
+    }
+    .cta-section .hero-buttons { justify-content: center; position: relative; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 4rem 5rem 2rem;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid rgba(245,240,232,0.08);
+    }
+
+    .footer-brand .nav-logo { font-size: 2rem; }
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: rgba(245,240,232,0.45);
+      line-height: 1.7;
+      margin-top: 1rem;
+      max-width: 260px;
+      font-weight: 300;
+    }
+
+    .footer-col h4 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.35);
+      margin-bottom: 1.5rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.75rem; }
+    .footer-col ul a {
+      font-size: 0.85rem;
+      color: rgba(245,240,232,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: rgba(245,240,232,0.25);
+      font-family: 'Space Mono', monospace;
+    }
+    .footer-socials { display: flex; gap: 1.2rem; }
+    .footer-socials a {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(245,240,232,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      color: rgba(245,240,232,0.5);
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .footer-socials a:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow  { animation: fadeUp 0.7s ease 0.1s both; }
+    .hero-title    { animation: fadeUp 0.7s ease 0.25s both; }
+    .hero-desc     { animation: fadeUp 0.7s ease 0.4s both; }
+    .hero-buttons  { animation: fadeUp 0.7s ease 0.55s both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 420px; }
+      .hero-left { padding: 5rem 2rem 4rem; }
+      .features { padding: 5rem 2rem; }
+      .features-grid { grid-template-columns: 1fr; gap: 0; }
+      .stats { grid-template-columns: repeat(2, 1fr); padding: 3rem 2rem; }
+      .stat-item:nth-child(2) { border-right: none; }
+      .showcase { grid-template-columns: 1fr; padding: 5rem 2rem; gap: 3rem; }
+      .testimonials { padding: 5rem 2rem; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .cta-section { padding: 6rem 2rem; }
+      footer { padding: 4rem 2rem 2rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#"><span>Nova</span>Build</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#showcase">Work</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#cta" class="nav-cta">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Web Design Studio</p>
+      <h1 class="hero-title">Build.<br><em>Ship.</em><br>Grow.</h1>
+      <p class="hero-desc">
+        We craft pixel-perfect landing pages that convert visitors into customers. Modern, fast, and built to impress.
+      </p>
+      <div class="hero-buttons">
+        <a href="#showcase" class="btn-primary">See Our Work</a>
+        <a href="#cta" class="btn-outline">Get Started</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-right-inner">
+        <div class="hero-graphic">
+          <div class="hero-graphic-inner"></div>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-num">98%</div>
+        <div class="hero-badge-label">Client Satisfaction Rate</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <span>HTML &amp; CSS</span><span class="accent">✦</span>
+      <span>Landing Pages</span><span class="accent">✦</span>
+      <span>Responsive Design</span><span class="accent">✦</span>
+      <span>UI / UX</span><span class="accent">✦</span>
+      <span>Web Development</span><span class="accent">✦</span>
+      <span>Performance</span><span class="accent">✦</span>
+      <span>Modern Layouts</span><span class="accent">✦</span>
+      <span>Creative Builds</span><span class="accent">✦</span>
+      <!-- duplicate for seamless loop -->
+      <span>HTML &amp; CSS</span><span class="accent">✦</span>
+      <span>Landing Pages</span><span class="accent">✦</span>
+      <span>Responsive Design</span><span class="accent">✦</span>
+      <span>UI / UX</span><span class="accent">✦</span>
+      <span>Web Development</span><span class="accent">✦</span>
+      <span>Performance</span><span class="accent">✦</span>
+      <span>Modern Layouts</span><span class="accent">✦</span>
+      <span>Creative Builds</span><span class="accent">✦</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <h2 class="section-title">What We<br>Deliver</h2>
+      <p class="section-subtitle">Every project is crafted with attention to detail, creative thinking, and modern best practices.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⬡</div>
+        <h3 class="feature-title">Smart Layouts</h3>
+        <p class="feature-desc">Carefully structured columns, sections, and grids that guide the eye and tell your story clearly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◈</div>
+        <h3 class="feature-title">Visual Hierarchy</h3>
+        <p class="feature-desc">Headers, subheadings, and footers placed with purpose so every visitor knows exactly where to look.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◉</div>
+        <h3 class="feature-title">Pixel Precision</h3>
+        <p class="feature-desc">Alignment, padding, and spacing calculated to the pixel — no overlapping elements, ever.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◐</div>
+        <h3 class="feature-title">Color Systems</h3>
+        <p class="feature-desc">Cohesive palettes built with CSS variables that look great across every screen and device.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◯</div>
+        <h3 class="feature-title">Responsive First</h3>
+        <p class="feature-desc">Mobile, tablet, desktop — your page adapts flawlessly with fluid grids and flexible layouts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◇</div>
+        <h3 class="feature-title">Creative Edge</h3>
+        <p class="feature-desc">Distinctive aesthetics that set you apart — not cookie-cutter templates, but genuinely designed work.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-num">240+</div>
+      <div class="stat-label">Projects Shipped</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4.9★</div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Pure HTML &amp; CSS</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">0ms</div>
+      <div class="stat-label">Runtime Dependencies</div>
+    </div>
+  </div>
+
+  <!-- SHOWCASE -->
+  <section class="showcase" id="showcase">
+    <div class="showcase-visual">
+      <div class="showcase-box">
+        <div class="showcase-grid-bg"></div>
+        <div class="showcase-box-inner">
+          <div class="showcase-center-dot"></div>
+        </div>
+      </div>
+      <div class="showcase-tag">Demo Preview</div>
+    </div>
+    <div class="showcase-content">
+      <h2 class="section-title">Design That<br>Works Hard</h2>
+      <p>A landing page isn't just pretty code — it's your first impression, your pitch, and your conversion machine all in one. We make sure yours does the job.</p>
+      <ul class="checklist">
+        <li>Semantic HTML structure for accessibility</li>
+        <li>Clean CSS with no element overlap</li>
+        <li>Balanced whitespace and visual breathing room</li>
+        <li>Strategic use of color and typography</li>
+        <li>Header, sections, and footer in perfect harmony</li>
+      </ul>
+      <a href="#cta" class="btn-primary">Start Your Project</a>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <h2 class="section-title" style="color:var(--cream)">What Clients<br>Are Saying</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The landing page they built for us was everything we asked for — clean, modern, and it actually converts visitors into leads. Couldn't be happier."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div>
+            <div class="author-name">Anjali Krishnan</div>
+            <div class="author-role">Founder, LoopKit</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I was amazed at how much attention they paid to every little detail — the padding, the colors, the hover states. It felt custom-made, not templated."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MS</div>
+          <div>
+            <div class="author-name">Marcus Shaw</div>
+            <div class="author-role">CEO, Driftware</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Fast, responsive, and genuinely beautiful. NovaBuild understood our brand instantly and the end result blew our whole team away. 10/10."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">PR</div>
+          <div>
+            <div class="author-name">Priya Ramesh</div>
+            <div class="author-role">Head of Growth, Vanta</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <h2 class="section-title">Ready to<br>Build Yours?</h2>
+    <p>Launch your next landing page with confidence. Beautifully designed, meticulously coded, and ready to convert.</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">Get In Touch</a>
+      <a href="#features" class="btn-outline">Learn More</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="nav-logo" href="#"><span>Nova</span>Build</a>
+        <p>Crafting high-quality HTML &amp; CSS landing pages that make lasting first impressions and drive real results.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#showcase">Work</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
+          <li><a href="#cta">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Landing Pages</a></li>
+          <li><a href="#">UI Design</a></li>
+          <li><a href="#">CSS Animations</a></li>
+          <li><a href="#">Responsive Builds</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 NovaBuild. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#">tw</a>
+        <a href="#">gh</a>
+        <a href="#">in</a>
+        <a href="#">dr</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
